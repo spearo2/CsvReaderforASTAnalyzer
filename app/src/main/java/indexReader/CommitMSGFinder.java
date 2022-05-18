@@ -126,7 +126,7 @@ public class CommitMSGFinder {
                         String msg = rev.getFullMessage();
                         ArrayList<String> temp = new ArrayList<>();
                         temp.add(rev.getName());
-                        temp.add("\"" + msg + "\"");
+                        temp.add("\" " + msg + " \"");
                         commitMSG.add(temp);
                         //System.out.println(msg);
                         //Matcher matcher = pattern.matcher(msg);
