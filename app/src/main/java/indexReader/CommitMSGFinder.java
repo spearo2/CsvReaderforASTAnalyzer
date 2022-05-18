@@ -14,10 +14,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,7 +25,6 @@ public class CommitMSGFinder {
     private String URLPath;
     private String savePath;
     private ArrayList<ArrayList<String>> listRead = new ArrayList<ArrayList<String>>();
-    private ArrayList<ArrayList<String>> commitMSG = new ArrayList<ArrayList<String>>();
     private static int nameColumn = 0;
     private static int issueKeyColumn = 1;
     private static int URLColumn = 2;
@@ -63,17 +59,46 @@ public class CommitMSGFinder {
         }
     }
     public void fillUpMSG () {
+        ArrayList<ArrayList<String>> temp = null;
         for (ArrayList<String> col : listRead) {
             if (col.size() != 0) {
                 String [] parsed = col.get(2).split("/");
-                getCommitMSG("apache/"+parsed[parsed.length-1]);
+                temp = getCommitMSG("apache/"+parsed[parsed.length-1]);
 
+                String newPath = "/data/CGYW/IRdata/" + col.get(0) + ".csv";
+                try {
+                    FileOutputStream fos = new FileOutputStream(newPath);
+                    PrintWriter out = new PrintWriter(fos);
+
+                    for (ArrayList<String> content : temp) {
+                        int i = 0;
+                        for (String contents : content) {
+                            if (contents != null) {
+                                if (i++ != 0)
+                                    out.print(",");
+                                out.print(contents.trim());
+                            }
+
+                        }
+                            out.print("\n");
+                    }
+                    out.flush();
+                    out.close();
+                    fos.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         }
 
     }
-    public void getCommitMSG (String projectName) {
+    public ArrayList<ArrayList<String>> getCommitMSG (String projectName) {
+        ArrayList<ArrayList<String>> commitMSG = new ArrayList<ArrayList<String>>();
+        ArrayList<String> title = new ArrayList<>();
+        title.add("CommitID");
+        title.add("Message");
+        commitMSG.add(title);
         FileRepositoryBuilder builder = new FileRepositoryBuilder();
         Repository repo = null;
 
@@ -90,7 +115,11 @@ public class CommitMSGFinder {
 //                    System.out.println(projectName + "/" + ID + ":" + rev.getFullMessage());
 //                    break;
                         String msg = rev.getFullMessage();
-                        System.out.println(msg);
+                        ArrayList<String> temp = new ArrayList<>();
+                        temp.add(rev.getName());
+                        temp.add(msg);
+                        commitMSG.add(temp);
+                        //System.out.println(msg);
                         //Matcher matcher = pattern.matcher(msg);
                         //while(matcher.find()) {
 //                            if (projectKey.get("https://github.com/" + projectName)!=null)
@@ -106,5 +135,6 @@ public class CommitMSGFinder {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return commitMSG;
     }
 }
