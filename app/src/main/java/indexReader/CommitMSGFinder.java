@@ -64,7 +64,8 @@ public class CommitMSGFinder {
             if (col.size() != 0) {
                 String [] parsed = col.get(2).split("/");
                 temp = getCommitMSG("apache/"+parsed[parsed.length-1]);
-
+                if (temp == null)
+                    continue;
                 String newPath = "/data/CGYW/IRdata/" + col.get(0) + ".csv";
                 try {
                     FileOutputStream fos = new FileOutputStream(newPath);
@@ -103,7 +104,10 @@ public class CommitMSGFinder {
         Repository repo = null;
 
         try {
-            repo = builder.setGitDir(new File("/data/CGYW/clones/"+projectName+"/.git/.git")).setMustExist(true).build();
+            File file = new File("/data/CGYW/clones/"+projectName+"/.git/.git");
+            if(!file.exists())
+                return null;
+            repo = builder.setGitDir(file).setMustExist(true).build();
 
             Git git = new Git(repo);
             Iterable<RevCommit> log = null;
