@@ -77,7 +77,12 @@ public class CommitMSGFinder {
                             if (contents != null) {
                                 if (i++ != 0)
                                     out.print(",");
-                                out.print(contents.trim());
+                                String msg = contents.trim();
+                                if(msg.contains("\n"))
+                                    msg.replaceAll("\n","\\n");
+                                if(msg.contains(","))
+                                    msg.replaceAll(","," ");
+                                out.print(msg);
                             }
 
                         }
