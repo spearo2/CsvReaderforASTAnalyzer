@@ -13,17 +13,22 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.List;
 
-public class App {
-
+public class Main {
+    private static String path;
     public static void main(String[] args) {
-        App main = new App();
+        Main main = new Main();
+        if (args[0].equals("-p"))
+            path = args[1];
+
         if(args[0].equals("-avg"))
             main.findAverage(args[1]);
         else if(args[0].equals("-record"))
             main.findRecord(args[1],args[2]);
+        else if (args[0].equals("-commit")) {
+            CommitMSGFinder msg = new CommitMSGFinder(args[1]);
+        }
         else {
             System.out.println("Please try again with following options"
                                 + "\n" + "-avg : find average(path required)"
@@ -32,28 +37,8 @@ public class App {
         }
     }
 
-        private void findRecord(String inputpath, String recordNum) {
-        Reader in = null;
-        Random ran = new Random();
-        ArrayList <String> found = new ArrayList<String>();
-        try {
-            in = new FileReader(inputpath);
-            CSVParser parser = CSVFormat.EXCEL.parse(in);
+    private void findRecord(String inputpath, String recordNum) {
 
-            for (CSVRecord record : parser) {
-                if(record.size() == Integer.valueOf(recordNum))
-                    found.add(record.toString());
-            }
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for(int i = 0; i < 10; i++)
-        {
-            System.out.println(found.get(ran.nextInt(found.size()-1)));
-        }
 
 
     }
@@ -73,22 +58,34 @@ public class App {
             int average = recordSizeSum/recordCounter;
             System.out.println("Average : " + average);
 
+
             in = new FileReader(inputpath);
             CSVParser parser2 = CSVFormat.EXCEL.parse(in);
+            List<CSVRecord> list = parser2.getRecords();
             long numerator = 0;
             int denominator = recordCounter-1;
-            for (CSVRecord record : parser2) {
-                int sigma = record.size()-average;
+            int maxCount = 0, mode = 0;
+            for (CSVRecord record : list) {
+                int count = 0;
+                int sigma = record.size() - average;
                 sigma = sigma * sigma;
                 numerator = numerator + sigma;
-                //System.out.println(numerator);
+//                for (CSVRecord record2 : list) {
+//                    if (record.size() == record2.size())
+//                        ++count;
+//                    if (count > maxCount) {
+//                        maxCount = count;
+//                        mode = record.size();
+//                    }
+//
+//                    System.out.println(mode);
+//                }
             }
+                double std = Math.sqrt(numerator / denominator);
+                System.out.println("Standard Deviation : " + std
+                                    + "\n" +"Total Count : " + recordCounter);
 
-            double std = Math.sqrt(numerator/denominator);
-            System.out.println("Standard Deviation : " + std);
-
-
-            } catch (FileNotFoundException ex) {
+        } catch (FileNotFoundException ex) {
             ex.printStackTrace();
         } catch (IOException ex) {
             ex.printStackTrace();
