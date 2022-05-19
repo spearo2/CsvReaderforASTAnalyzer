@@ -85,8 +85,8 @@ public class IssueDocGenerator {
                                 temp = new ArrayList<String>();
                                 temp.add(file.getName());
                                 for (String str : record) {
-                                    System.out.println(str);
-                                }
+                           	    temp.add(str);
+			        }
                                 csv.add(temp);
                         }
                         in.close();
