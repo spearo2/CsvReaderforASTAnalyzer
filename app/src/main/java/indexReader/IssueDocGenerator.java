@@ -65,6 +65,9 @@ public class IssueDocGenerator {
             String projectName = row.get(0);
             if(!projectName.contains("commons-csv")) {
                  projectName = row.get(0).replaceAll(".csv","");
+            } else if (projectName.contains("click")) {
+                System.out.println(projectName);
+                System.out.println(row.get(0).replaceAll(".csv",""));
             } else {
                 projectName = row.get(0).replaceAll(".csv","");
                 projectName += "-csv";
