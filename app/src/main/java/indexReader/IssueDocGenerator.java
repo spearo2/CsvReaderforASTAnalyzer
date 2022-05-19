@@ -69,7 +69,7 @@ public class IssueDocGenerator {
             Matcher matcher = pattern.matcher(msg);
             while(matcher.find()) {
                 String issueKey = matcher.group(1);
-                System.out.println(issueKey);
+                System.out.println(matcher.group(0) + "||" + matcher.group(1));
                 String [] issueKeySplit = issueKey.split("-");
                 if (keyList.get("https://github.com/"+projectName.replaceAll("~","/")) != null && keyList.get("https://github.com/"+projectName.replaceAll("~","/")).equalsIgnoreCase(issueKeySplit[0])) {
                     if (combined.containsKey(projectName)) {
