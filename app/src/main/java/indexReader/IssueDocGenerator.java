@@ -32,7 +32,12 @@ public class IssueDocGenerator {
 
             for (String key: combined.keySet()) {
                 if (combined.get(key).size() != 0) {
-                    out.print(combined.get(key).size() + ",");
+                    int cnt = 0;
+                    for (String str:combined.get(key)) {
+                        if (str.length() != 0)
+                            cnt++;
+                    }
+                    out.print(cnt + ",");
                     out.print(key+",");
                     int i = 0;
                     for (String content: combined.get(key)) {
