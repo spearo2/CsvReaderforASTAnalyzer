@@ -76,7 +76,9 @@ public class IssueDocGenerator {
                 String key = "";
                 try {
                         Reader in = new FileReader(path + "/" + file.getName());
-                        CSVParser parser = CSVFormat.EXCEL.parse(in);
+                        CSVFormat csvFileFormat = CSVFormat.DEFAULT.withQuote(null);
+                        CSVParser parser = null;
+                        parser = new CSVParser(in,csvFileFormat);
                         System.out.println(path + "/" + file.getName());
                         for (CSVRecord record : parser) {
 
