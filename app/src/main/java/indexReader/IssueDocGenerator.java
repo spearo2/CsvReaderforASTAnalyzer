@@ -5,8 +5,7 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -14,38 +13,88 @@ public class IssueDocGenerator {
     private String path;
     private ArrayList<String> keyList = new ArrayList<>();
     private ArrayList<ArrayList<String>> csv = new ArrayList<>();
-    private HashMap<String,ArrayList<String>> combined = new HashMap<>();
+    private HashMap<String, ArrayList<String>> combined = new HashMap<>();
 
 
-    public IssueDocGenerator (String path) {
+    public IssueDocGenerator(String path) {
         this.path = path;
         readKeyList();
         csvToMap();
         makeIssuePerProject();
         writeMap();
     }
-    public void writeMap () {
-        try {
-            FileOutputStream fos = new FileOutputStream(path + "/issue_num_list.csv");
-            PrintWriter out = new PrintWriter(fos);
 
-            for (String key: combined.keySet()) {
-                out.print(key+",");
-                int i = 0;
-                for (String content: combined.get(key)) {
-                    out.print(content);
-                    if (i++ < combined.get(key).size())
-                        out.print(",");
+    public void writeMap() {
+
+        try {
+                FileOutputStream fos = new FileOutputStream(path + "/issue_num_list.csv");
+                PrintWriter out = new PrintWriter(fos);
+
+                for (ArrayList<String> l : combined.values()) {
+                    Set<String> hs = new HashSet<>();
+                    hs.addAll(l);
+                    l.clear();
+                    l.addAll(hs);
                 }
-                out.print("\n");
-            }
-            out.flush();
-            out.close();
-            fos.close();
+
+                List<ArrayList<String>> l = new ArrayList<>(combined.values());
+                Collections.sort(l, new Comparator<ArrayList<String>>() {
+                    public int compare(ArrayList<String> s1, ArrayList<String> s2) {
+                        return Integer.compare(s2.size(), s1.size());
+                    }
+                });
+
+                for (ArrayList<String> a : l) {
+                    Iterator<Map.Entry<String, ArrayList<String>>> iter = combined.entrySet().iterator();
+                    while (iter.hasNext()) {
+                        Map.Entry<String, ArrayList<String>> e = iter.next();
+                        if (e.getValue().equals(a)) {
+
+                            out.print(e.getKey() + ",");
+                            int i = 0;
+                            for (String content : a) {
+                                out.print(content);
+                                if (i++ < a.size())
+                                    out.print(",");
+                            }
+                            out.print("\n");
+                        }
+
+                        //System.out.println(e.getKey() + "-" + a);
+                        iter.remove();
+                    }
+                }
+
+                out.flush();
+                out.close();
+                fos.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
+//        try {
+//            FileOutputStream fos = new FileOutputStream(path + "/issue_num_list.csv");
+//            PrintWriter out = new PrintWriter(fos);
+//
+//            for (String key: combined.keySet()) {
+//                out.print(key+",");
+//                int i = 0;
+//                for (String content: combined.get(key)) {
+//                    out.print(content);
+//                    if (i++ < combined.get(key).size())
+//                        out.print(",");
+//                }
+//                out.print("\n");
+//            }
+//            out.flush();
+//            out.close();
+//            fos.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+
     public void makeIssuePerProject () {
         Pattern pattern = Pattern.compile("([a-zA-Z]+-\\d+)");
         for (ArrayList <String> row : csv) {
