@@ -63,9 +63,12 @@ public class IssueDocGenerator {
             if(row.size() < 3)
                 continue;
             String projectName = row.get(0);
-            String [] temp2 = projectName.split(".");
-            projectName = temp2[0];
-
+            if(!projectName.contains("commons-csv")) {
+                 projectName = row.get(0).replaceAll(".csv","");
+            } else {
+                projectName = row.get(0).replaceAll(".csv","");
+                projectName += "-csv";
+            }
             String ID = row.get(1);
             String msg = row.get(2);
             Matcher matcher = pattern.matcher(msg);
