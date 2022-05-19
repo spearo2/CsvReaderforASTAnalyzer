@@ -41,8 +41,8 @@ public class CommitMSGFinder {
     }
     public void readURLList () {
         try {
-//            Reader in = new FileReader("/data/CGYW/ASTChangeAnalyzer/data/apacheURLList.csv");
-            Reader in = new FileReader("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/data/apacheURLList.csv");
+            Reader in = new FileReader("/data/CGYW/ASTChangeAnalyzer/data/apacheURLList.csv");
+//            Reader in = new FileReader("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/data/apacheURLList.csv");
             CSVParser parser = CSVFormat.EXCEL.parse(in);
             boolean a = false;
             for (CSVRecord record : parser) {
