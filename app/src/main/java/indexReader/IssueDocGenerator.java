@@ -22,7 +22,7 @@ public class IssueDocGenerator {
         this.path = path;
         readKeyList();
         csvToMap();
-        makeIssuePerProject();
+        //makeIssuePerProject();
     }
 
     public void makeIssuePerProject () {
@@ -78,13 +78,16 @@ public class IssueDocGenerator {
 			if (record.
                         Reader in = new FileReader(path + "/" + file.getName());
                         CSVParser parser = CSVFormat.EXCEL.parse(in);
+                        System.out.println(path + "/" + file.getName());
                         for (CSVRecord record : parser) {
-                            temp = new ArrayList<String>();
-                            temp.add(file.getName());
-                            for (String str : record) {
-                                temp.add(str);
-                            }
-                            csv.add(temp);
+
+                                temp = new ArrayList<String>();
+                                temp.add(file.getName());
+                                for (String str : record) {
+                                    temp.add(str);
+                                    System.out.println(str);
+                                }
+                                csv.add(temp);
                         }
                         in.close();
                 } catch (IOException e) {
