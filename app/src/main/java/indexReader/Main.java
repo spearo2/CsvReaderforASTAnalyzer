@@ -28,6 +28,8 @@ public class Main {
             main.findRecord(args[1],args[2]);
         else if (args[0].equals("-commit")) {
             CommitMSGFinder msg = new CommitMSGFinder(args[1]);
+        } else if (args[0].equals("-issue")) {
+            IssueDocGenerator issue = new IssueDocGenerator(args[1]);
         }
         else {
             System.out.println("Please try again with following options"

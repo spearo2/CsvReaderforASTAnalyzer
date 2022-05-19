@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CommitMSGFinder {
 
@@ -34,7 +35,10 @@ public class CommitMSGFinder {
         readURLList();
         fillUpMSG();
     }
+    public void readURLList2 () {
+        ArrayList<String> temp = new ArrayList<>();
 
+    }
     public void readURLList () {
         try {
             Reader in = new FileReader("/data/CGYW/ASTChangeAnalyzer/data/apacheURLList.csv");
@@ -60,13 +64,19 @@ public class CommitMSGFinder {
     }
     public void fillUpMSG () {
         ArrayList<ArrayList<String>> temp = null;
+        Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com/()(.*?)$");
+        String fileName = "";
+
         for (ArrayList<String> col : listRead) {
             if (col.size() != 0) {
+                Matcher matcher = pattern.matcher(col.get(2));
                 String [] parsed = col.get(2).split("/");
-                temp = getCommitMSG("apache/"+parsed[parsed.length-1]);
+                if (matcher.find())
+                    fileName = matcher.group(3);
+                    temp = getCommitMSG(fileName);
                 if (temp == null)
                     continue;
-                String newPath = "/data/CGYW/IRdata/" + col.get(0) + ".csv";
+                String newPath = "/data/CGYW/IRdata/" + fileName.replaceAll("/","~") + ".csv";
                 try {
                     FileOutputStream fos = new FileOutputStream(newPath);
                     PrintWriter out = new PrintWriter(fos);
@@ -120,24 +130,12 @@ public class CommitMSGFinder {
                 log = git.log().call();
                 for (Iterator<RevCommit> iterator = log.iterator(); iterator.hasNext();) {
                     RevCommit rev = iterator.next();
-//                    if(ID.equals(rev.getName())) {
-//                    System.out.println(projectName + "/" + ID + ":" + rev.getFullMessage());
-//                    break;
                         String msg = rev.getFullMessage();
                         ArrayList<String> temp = new ArrayList<>();
                         temp.add(rev.getName());
                         msg = msg.replaceAll("\n"," ");
                         temp.add(msg);
                         commitMSG.add(temp);
-                        //System.out.println(msg);
-                        //Matcher matcher = pattern.matcher(msg);
-                        //while(matcher.find()) {
-//                            if (projectKey.get("https://github.com/" + projectName)!=null)
-//                                if(matcher.group(1).toUpperCase().contains(projectKey.get("https://github.com/" + projectName).toUpperCase()))
-//                                    IssueNum += "~" + matcher.group(1);
-                        //}
-                        //break;
-                    //}
                 }
             } catch (GitAPIException e) {
                 e.printStackTrace();
