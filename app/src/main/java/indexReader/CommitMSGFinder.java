@@ -78,33 +78,33 @@ public class CommitMSGFinder {
                     continue;
                 String newPath = "/data/CGYW/IRdata/" + fileName.replaceAll("/","~") + ".csv";
                 try {
-                    FileOutputStream fos = new FileOutputStream(newPath);
-                    PrintWriter out = new PrintWriter(fos);
+                FileOutputStream fos = new FileOutputStream(newPath);
+                PrintWriter out = new PrintWriter(fos);
 
-                    for (ArrayList<String> content : temp) {
-                        int i = 0;
-                        for (String contents : content) {
-                            if (contents != null) {
-                                if (i++ != 0)
-                                    out.print(",");
-                                String msg = contents.trim();
-                                if(msg.contains("\n"))
-                                    msg.replaceAll("\n","\\n");
-                                if(msg.contains(","))
-                                    msg.replaceAll(","," ");
-                                out.print(msg);
-                            }
-
+                for (ArrayList<String> content : temp) {
+                    int i = 0;
+                    for (String contents : content) {
+                        if (contents != null) {
+                            if (i++ != 0)
+                                out.print(",");
+                            String msg = contents.trim();
+                            if(msg.contains("\n"))
+                                msg.replaceAll("\n","\\n");
+                            if(msg.contains(","))
+                                msg.replaceAll(","," ");
+                            out.print(msg);
                         }
-                            out.print("\n");
+
                     }
-                    out.flush();
-                    out.close();
-                    fos.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    out.print("\n");
                 }
+                out.flush();
+                out.close();
+                fos.close();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+        }
 
         }
 

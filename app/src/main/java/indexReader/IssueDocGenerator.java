@@ -4,18 +4,17 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IssueDocGenerator {
     private String path;
     private ArrayList<String> keyList = new ArrayList<>();
     private ArrayList<ArrayList<String>> csv = new ArrayList<>();
-    private ArrayList<ArrayList<String>> combined = new ArrayList<>();
+    private HashMap<String,ArrayList<String>> combined = new HashMap<>();
 
 
     public IssueDocGenerator (String path) {
@@ -23,13 +22,51 @@ public class IssueDocGenerator {
         readKeyList();
         csvToMap();
         makeIssuePerProject();
+        writeMap();
     }
+    public void writeMap () {
+        try {
+            FileOutputStream fos = new FileOutputStream(path + "/issue_num_list.csv");
+            PrintWriter out = new PrintWriter(fos);
 
-    public void makeIssuePerProject () {
-        for (ArrayList <String> row : csv) {
-            for (String str: row) {
-                System.out.println(str);
+            for (String key: combined.keySet()) {
+                out.print(key+",");
+                int i = 0;
+                for (String content: combined.get(key)) {
+                    out.print(content);
+                    if (i++ < combined.get(key).size())
+                        out.print(",");
+                }
+                out.print("\n");
             }
+            out.flush();
+            out.close();
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void makeIssuePerProject () {
+        Pattern pattern = Pattern.compile("([a-zA-Z]+-\\d+)");
+        for (ArrayList <String> row : csv) {
+            String projectName = row.get(0);
+            String ID = row.get(1);
+            String msg = row.get(2);
+            Matcher matcher = pattern.matcher(msg);
+            while(matcher.find()) {
+                String issueKey = matcher.group(1);
+                String [] issueKeySplit = issueKey.split("-");
+                if (keyList.contains(issueKeySplit[0].toUpperCase())) {
+                    if (combined.containsKey(projectName)) {
+                        combined.get(projectName).add(issueKey);
+                    } else {
+                        ArrayList<String> temp = new ArrayList<>();
+                        temp.add(issueKey);
+                        combined.put(projectName,temp);
+                    }
+                }
+            }
+
         }
     }
 
