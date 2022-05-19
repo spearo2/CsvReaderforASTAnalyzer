@@ -33,8 +33,8 @@ public class IssueDocGenerator {
             for (String key: combined.keySet()) {
                 if (combined.get(key).size() != 0) {
                     int cnt = 0;
-                    for (String str:combined.get(key)) {
-                        if (str.length() != 0)
+                    for (String str : combined.get(key)) {
+                        if (str.contains("-"))
                             cnt++;
                     }
                     out.print(cnt + ",");
