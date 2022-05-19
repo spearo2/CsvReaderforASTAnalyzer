@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class IssueDocGenerator {
     private String path;
-    private ArrayList<String> keyList = new ArrayList<>();
+    private HashMap<String,String> keyList = new HashMap<>();
     private ArrayList<ArrayList<String>> csv = new ArrayList<>();
     private HashMap<String,ArrayList<String>> combined = new HashMap<>();
 
@@ -70,7 +70,7 @@ public class IssueDocGenerator {
             while(matcher.find()) {
                 String issueKey = matcher.group(1);
                 String [] issueKeySplit = issueKey.split("-");
-                if (keyList.contains(issueKeySplit[0].toUpperCase())) {
+                if (keyList.get("https://github.com/"+projectName.replaceAll("~","/")).equals(issueKeySplit[0])) {
                     if (combined.containsKey(projectName)) {
                         combined.get(projectName).add(issueKey);
                     } else {
@@ -79,6 +79,7 @@ public class IssueDocGenerator {
                         combined.put(projectName,temp);
                     }
                 }
+
             }
 
         }
@@ -86,6 +87,8 @@ public class IssueDocGenerator {
 
     public void readKeyList () {
         try {
+            Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com/()(.*?)$");
+
             Reader in = new FileReader("/data/CGYW/ASTChangeAnalyzer/data/apacheURLList.csv");
 //            Reader in = new FileReader("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/data/apacheURLList.csv");
             CSVParser parser = CSVFormat.EXCEL.parse(in);
@@ -95,16 +98,20 @@ public class IssueDocGenerator {
                 //ArrayList<String> temp = new ArrayList<>();
                 int b = 0;
                 for (String content:record) {
+                    String temp = "";
                     if (!a) {
                         a = true;
                         break;
 
                     }
-                    if (b++ == 1) {
-                        keyList.add(content);
-                        System.out.println(content);
+                    if (b == 1) {
+                        temp = content;
+                    } else if(b == 2) {
+                        Matcher matcher = pattern.matcher(content);
+                        if (matcher.find())
+                            keyList.put(matcher.group(3).replaceAll("/","~"),temp);
                     }
-
+                    b++;
                 }
 //                listRead.add(temp);
             }
