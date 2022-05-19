@@ -70,7 +70,7 @@ public class IssueDocGenerator {
             while(matcher.find()) {
                 String issueKey = matcher.group(1);
                 if (issueKey == null)
-                    issueKey = matcher.group(1);
+                    issueKey = matcher.group(0);
                 String [] issueKeySplit = issueKey.split("-");
                 if (keyList.get("https://github.com/"+projectName.replaceAll("~","/")) != null && keyList.get("https://github.com/"+projectName.replaceAll("~","/")).equalsIgnoreCase(issueKeySplit[0])) {
                     if (combined.containsKey(projectName)) {
