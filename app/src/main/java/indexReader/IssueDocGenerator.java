@@ -70,6 +70,8 @@ public class IssueDocGenerator {
             while(matcher.find()) {
                 String issueKey = matcher.group(1);
                 String [] issueKeySplit = issueKey.split("-");
+                System.out.println();
+
                 if (keyList.get("https://github.com/"+projectName.replaceAll("~","/")) != null && keyList.get("https://github.com/"+projectName.replaceAll("~","/")).equals(issueKeySplit[0])) {
                     if (combined.containsKey(projectName)) {
                         combined.get(projectName).add(issueKey);
@@ -97,8 +99,9 @@ public class IssueDocGenerator {
             for (CSVRecord record : parser) {
                 //ArrayList<String> temp = new ArrayList<>();
                 int b = 0;
+                String temp = "";
                 for (String content:record) {
-                    String temp = "";
+
                     if (!a) {
                         a = true;
                         break;
