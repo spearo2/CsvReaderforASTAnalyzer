@@ -63,14 +63,13 @@ public class IssueDocGenerator {
         for (ArrayList <String> row : csv) {
             if(row.size() < 3)
                 continue;
-            String projectName = row.get(0);
+            String projectName = row.get(0).replaceAll(".csv","");
             String ID = row.get(1);
             String msg = row.get(2);
             Matcher matcher = pattern.matcher(msg);
             while(matcher.find()) {
                 String issueKey = matcher.group(1);
                 String [] issueKeySplit = issueKey.split("-");
-                System.out.println("https://github.com/"+projectName.replaceAll("~","/"));
                 if (keyList.get("https://github.com/"+projectName.replaceAll("~","/")) != null && keyList.get("https://github.com/"+projectName.replaceAll("~","/")).equals(issueKeySplit[0])) {
                     if (combined.containsKey(projectName)) {
                         combined.get(projectName).add(issueKey);
