@@ -36,7 +36,6 @@ public class IssueDocGenerator {
                     for (String str : combined.get(key)) {
                         if (str.contains("-")) {
                             cnt++;
-                            System.out.println(str);
                         }
 
                     }
@@ -64,6 +63,7 @@ public class IssueDocGenerator {
             if(row.size() < 3)
                 continue;
             String projectName = row.get(0).replaceAll(".csv","");
+            System.out.println(projectName);
             String ID = row.get(1);
             String msg = row.get(2);
             Matcher matcher = pattern.matcher(msg);
@@ -111,7 +111,6 @@ public class IssueDocGenerator {
                         temp = content;
                     } else if(b == 2) {
                         keyList.put(content,temp);
-                        System.out.println(content + "|||" + temp);
                     }
                     b++;
                 }
