@@ -59,7 +59,7 @@ public class IssueDocGenerator {
         }
     }
     public void makeIssuePerProject () {
-        Pattern pattern = Pattern.compile("([a-zA-Z]+-\\d+)");
+        Pattern pattern = Pattern.compile("([a-zA-Z]+-\\d+)|([a-zA-Z]+\\d+-\\d+)");
         for (ArrayList <String> row : csv) {
             if(row.size() < 3)
                 continue;
@@ -70,7 +70,7 @@ public class IssueDocGenerator {
             while(matcher.find()) {
                 String issueKey = matcher.group(1);
                 String [] issueKeySplit = issueKey.split("-");
-                if (keyList.get("https://github.com/"+projectName.replaceAll("~","/")) != null && keyList.get("https://github.com/"+projectName.replaceAll("~","/")).equals(issueKeySplit[0])) {
+                if (keyList.get("https://github.com/"+projectName.replaceAll("~","/")) != null && keyList.get("https://github.com/"+projectName.replaceAll("~","/")).equalsIgnoreCase(issueKeySplit[0])) {
                     if (combined.containsKey(projectName)) {
                         combined.get(projectName).add(issueKey);
                     } else {
