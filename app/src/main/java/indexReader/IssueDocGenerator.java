@@ -110,9 +110,7 @@ public class IssueDocGenerator {
                     if (b == 1) {
                         temp = content;
                     } else if(b == 2) {
-                        Matcher matcher = pattern.matcher(content);
-                        if (matcher.find())
-                            keyList.put(matcher.group(3).replaceAll("/","~"),temp);
+                        keyList.put(content,temp);
                     }
                     b++;
                 }
