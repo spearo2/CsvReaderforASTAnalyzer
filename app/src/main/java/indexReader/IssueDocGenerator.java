@@ -34,8 +34,11 @@ public class IssueDocGenerator {
                 if (combined.get(key).size() != 0) {
                     int cnt = 0;
                     for (String str : combined.get(key)) {
-                        if (str.contains("-"))
+                        if (str.contains("-")) {
                             cnt++;
+                            System.out.println(str);
+                        }
+
                     }
                     out.print(cnt + ",");
                     out.print(key+",");
