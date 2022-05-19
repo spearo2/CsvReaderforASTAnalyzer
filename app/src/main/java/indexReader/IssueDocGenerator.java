@@ -65,9 +65,6 @@ public class IssueDocGenerator {
             String projectName = row.get(0);
             if(!projectName.contains("commons-csv")) {
                  projectName = row.get(0).replaceAll(".csv","");
-            } else if (projectName.contains("click")) {
-                System.out.println(projectName);
-                System.out.println(row.get(0).replaceAll(".csv",""));
             } else {
                 projectName = row.get(0).replaceAll(".csv","");
                 projectName += "-csv";
@@ -99,7 +96,7 @@ public class IssueDocGenerator {
         try {
             Pattern pattern = Pattern.compile("(git@|ssh|https://)github.com/()(.*?)$");
 
-            Reader in = new FileReader("/data/CGYW/ASTChangeAnalyzer/data/apacheURLList.csv");
+            Reader in = new FileReader("/data/CGYW/YW/ACA1/ASTChangeAnalyzer/data/apacheURLList.csv");
 //            Reader in = new FileReader("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/data/apacheURLList.csv");
             CSVParser parser = CSVFormat.EXCEL.parse(in);
             boolean a = false;
