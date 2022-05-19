@@ -22,7 +22,7 @@ public class IssueDocGenerator {
         this.path = path;
         readKeyList();
         csvToMap();
-        //makeIssuePerProject();
+        makeIssuePerProject();
     }
 
     public void makeIssuePerProject () {
@@ -85,7 +85,6 @@ public class IssueDocGenerator {
                                 temp = new ArrayList<String>();
                                 temp.add(file.getName());
                                 for (String str : record) {
-                                    temp.add(str);
                                     System.out.println(str);
                                 }
                                 csv.add(temp);
