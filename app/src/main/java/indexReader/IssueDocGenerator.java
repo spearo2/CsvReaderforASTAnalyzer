@@ -63,8 +63,8 @@ public class IssueDocGenerator {
             if(row.size() < 3)
                 continue;
             String projectName = row.get(0);
-            String [] temp = projectName.split(".");
-            projectName = temp[0];
+            String [] temp2 = projectName.split(".");
+            projectName = temp2[0];
 
             String ID = row.get(1);
             String msg = row.get(2);
