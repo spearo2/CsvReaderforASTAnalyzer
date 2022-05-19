@@ -85,6 +85,22 @@ public class IssueDocGenerator {
                         temp.add(issueKey);
                         combined.put(projectName,temp);
                     }
+                } else if (projectName.contains("systemml") && (issueKey.contains("SYSTEMDS") || issueKey.contains("SYSTEMML"))) {
+                    if (combined.containsKey(projectName)) {
+                        combined.get(projectName).add(issueKey);
+                    } else {
+                        ArrayList<String> temp = new ArrayList<>();
+                        temp.add(issueKey);
+                        combined.put(projectName,temp);
+                    }
+                } else if (projectName.contains("lucene-solr") && (issueKey.contains("LUCENE") || issueKey.contains("SOLR"))) {
+                    if (combined.containsKey(projectName)) {
+                        combined.get(projectName).add(issueKey);
+                    } else {
+                        ArrayList<String> temp = new ArrayList<>();
+                        temp.add(issueKey);
+                        combined.put(projectName,temp);
+                    }
                 }
 
             }
