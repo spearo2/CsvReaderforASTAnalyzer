@@ -128,7 +128,7 @@ public class IssueDocGenerator {
         int cnt = 0;
         for (File file : listOfFiles) {
             if (file.isFile()) {
-                //System.out.println(file.getName());
+                System.out.println(file.getName());
                 cnt++;
 
                 ArrayList<String> temp = null;
