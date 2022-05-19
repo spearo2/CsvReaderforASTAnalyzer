@@ -49,6 +49,8 @@ public class IssueDocGenerator {
     public void makeIssuePerProject () {
         Pattern pattern = Pattern.compile("([a-zA-Z]+-\\d+)");
         for (ArrayList <String> row : csv) {
+            if(row.size() < 3)
+                continue;
             String projectName = row.get(0);
             String ID = row.get(1);
             String msg = row.get(2);
