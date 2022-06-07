@@ -32,6 +32,8 @@ public class Main {
             IssueDocGenerator issue = new IssueDocGenerator(args[1]);
         } else if (args[0].equals("-combine")) {
             IndexCombiner combine = new IndexCombiner(args[1]);
+        } else if (args[0].equals("-count")) {
+            Counter counter = new Counter(args[1], args[2]);
         }
         else {
             System.out.println("Please try again with following options"

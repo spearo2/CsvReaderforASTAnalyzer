@@ -18,9 +18,40 @@ public class IndexCombiner {
     String path;
     public IndexCombiner(String path) {
         this.path = path;
-        combine();
+        refine();
+        //combine();
         //readCSV();
         writeMap();
+    }
+
+    public void refine () {
+        try {
+            Reader in = new FileReader(path);
+//            Reader in = new FileReader("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/data/apacheURLList.csv");
+            CSVParser parser = CSVFormat.EXCEL.parse(in);
+            for (CSVRecord record : parser) {
+                ArrayList<String> temp = new ArrayList<>();
+                boolean a = false;
+                String key = "";
+                for (String content : record) {
+                    if (!a) {
+                        a = true;
+                        key = content;
+                        continue;
+                    }
+                    if(content!=null && content.contains("~"))
+                        temp.add(content);
+                    //System.out.println(content);
+                }
+                Set<String> set = new HashSet<>(temp);
+                temp.clear();
+                temp.addAll(set);
+                if (temp.size()!=0)
+                    csv.put(key,temp);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public void combine () {
         try {
@@ -90,7 +121,7 @@ public class IndexCombiner {
     public void writeMap () {
         System.out.println(csv.size());
         try {
-            FileOutputStream fos = new FileOutputStream(path+"/issue_final.csv");
+            FileOutputStream fos = new FileOutputStream(path.replace(".csv","_final.csv"));
             PrintWriter out = new PrintWriter(fos);
 
             for (String key: csv.keySet()) {
