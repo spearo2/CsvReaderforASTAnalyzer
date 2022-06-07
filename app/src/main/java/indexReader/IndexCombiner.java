@@ -18,8 +18,43 @@ public class IndexCombiner {
     String path;
     public IndexCombiner(String path) {
         this.path = path;
-        readCSV();
+        combine();
+        //readCSV();
         writeMap();
+    }
+    public void combine () {
+        try {
+            Pattern pattern = Pattern.compile("(-\\d+)");
+            for (int j = 0; j < 5; j++) {
+                Reader in = new FileReader(path+"/index_java_issue_"+j+"_refined.csv");
+//            Reader in = new FileReader("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/data/apacheURLList.csv");
+                CSVParser parser = CSVFormat.EXCEL.parse(in);
+                for (CSVRecord record : parser) {
+                    ArrayList<String> temp = new ArrayList<>();
+                    boolean a = false;
+                    String key = "";
+                    for (String content : record) {
+                        if (!a) {
+                            a = true;
+                            key = content;
+                            continue;
+                        }
+                        Matcher matcher = pattern.matcher(content);
+                        if(content!=null && matcher.find())
+                            temp.add(content);
+                        //System.out.println(content);
+                    }
+                    Set<String> set = new HashSet<>(temp);
+                    temp.clear();
+                    temp.addAll(set);
+                    if (temp.size()!=0)
+                        csv.put(key,temp);
+                }
+
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     public void readCSV () {
         try {
@@ -55,7 +90,7 @@ public class IndexCombiner {
     public void writeMap () {
         System.out.println(csv.size());
         try {
-            FileOutputStream fos = new FileOutputStream(path.replace(".csv","_refined.csv"));
+            FileOutputStream fos = new FileOutputStream(path+"/issue_final.csv");
             PrintWriter out = new PrintWriter(fos);
 
             for (String key: csv.keySet()) {
