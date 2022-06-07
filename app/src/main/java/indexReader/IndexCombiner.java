@@ -8,6 +8,8 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,6 +42,9 @@ public class IndexCombiner {
                         temp.add(content);
                     //System.out.println(content);
                 }
+                Set<String> set = new HashSet<>(temp);
+                temp.clear();
+                temp.addAll(set);
                 if (temp.size()!=0)
                     csv.put(key,temp);
             }
