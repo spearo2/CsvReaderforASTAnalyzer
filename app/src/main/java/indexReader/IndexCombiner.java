@@ -8,6 +8,8 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IndexCombiner {
     HashMap<String, ArrayList<String>> csv = new HashMap<>();
@@ -19,10 +21,10 @@ public class IndexCombiner {
     }
     public void readCSV () {
         try {
+            Pattern pattern = Pattern.compile("(-\\d+)");
             Reader in = new FileReader(path);
 //            Reader in = new FileReader("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/data/apacheURLList.csv");
             CSVParser parser = CSVFormat.EXCEL.parse(in);
-
             for (CSVRecord record : parser) {
                 ArrayList<String> temp = new ArrayList<>();
                 boolean a = false;
@@ -31,9 +33,10 @@ public class IndexCombiner {
                     if (!a) {
                         a = true;
                         key = content;
-                        break;
+                        continue;
                     }
-                    if(content!=null && content.contains("-"))
+                    Matcher matcher = pattern.matcher(content);
+                    if(content!=null && matcher.find())
                         temp.add(content);
                     //System.out.println(content);
                 }
@@ -45,7 +48,7 @@ public class IndexCombiner {
         }
     }
     public void writeMap () {
-
+        System.out.println(csv.size());
         try {
             FileOutputStream fos = new FileOutputStream(path.replace(".csv","_refined.csv"));
             PrintWriter out = new PrintWriter(fos);
