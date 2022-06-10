@@ -7,11 +7,15 @@ import org.checkerframework.checker.units.qual.A;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BackReader {
     private String path;
     private ArrayList<ArrayList<String>> csv = new ArrayList<>();
     private ArrayList<ArrayList<String>> newIssue = new ArrayList<>();
+    private HashMap<String, Set<String>> issueSet = new HashMap<>();
     public BackReader(String subopt ,String path) {
         this.path = path;
 
@@ -26,6 +30,17 @@ public class BackReader {
             hashCodePerProject("ignite");
             hashCodePerProject("isis");
 
+        }
+        if (subopt.equals("fast")) {
+            readAll();
+            issuePerHashcode("ambari");
+            issuePerHashcode("beam");
+            issuePerHashcode("camel");
+            issuePerHashcode("cassandra");
+            issuePerHashcode("flink");
+            issuePerHashcode("hbase");
+            issuePerHashcode("ignite");
+            issuePerHashcode("isis");
         }
 
         if (subopt.equals("issue")) {
@@ -43,6 +58,45 @@ public class BackReader {
         }
         //System.out.println(newIssue.get(0));
     }
+    public void issuePerHashcode(String projectName) {
+        issueSet = new HashMap<>();
+        for (ArrayList<String> inner : csv) {
+            boolean a = false;
+            String hashCode = "";
+
+            for (String content : inner) {
+                if (!a) {
+                    a = true;
+                    hashCode = content;
+                    continue;
+                }
+                for (String element : content.split("~")) {
+                    if(element.length() < 20) {
+                        if (element.contains("-")) {
+                            if (element.toUpperCase().contains(projectName.toUpperCase())) {
+                                String [] tmp = element.split("-");
+                                if (tmp[0].length()==projectName.length() && !tmp[1].equals("0")) {
+                                    if (issueSet.containsKey(element))
+                                        issueSet.get(element).add(hashCode);
+                                    else {
+                                        Set<String> temp = new HashSet<>();
+                                        temp.add(hashCode);
+                                        issueSet.put(element.toUpperCase(),temp);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        writeMap(projectName);
+    }
+
+
+
+
     public void hashCodePerProject(String projectName) {
         for (ArrayList<String> inner : csv) {
             boolean a = false;
@@ -72,8 +126,36 @@ public class BackReader {
                 newIssue.add(temp2);
             }
         }
+        
+
         write(projectName);
     }
+    public void writeMap(String fileName) {
+        try {
+            FileOutputStream fos = new FileOutputStream("/Users/leechanggong/Desktop/fast/" + fileName + ".csv");
+            PrintWriter out = new PrintWriter(fos);
+
+            for (String key : issueSet.keySet()) {
+                out.print(key + ",");
+                for (String content : issueSet.get(key)) {
+                    out.print(content);
+                    out.print(",");
+                }
+                out.print("\n");
+            }
+
+            out.flush();
+            out.close();
+            fos.close();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     public void write(String fileName) {
         try {
             FileOutputStream fos = new FileOutputStream("/Users/leechanggong/Desktop/hashcode_par_project/" + fileName + ".csv");

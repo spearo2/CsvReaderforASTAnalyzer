@@ -25,7 +25,14 @@ public class TrainingSetGenerator {
 
     public TrainingSetGenerator(String path) {
         this.path = path;
-        read();
+        read("ambari");
+        read("beam");
+        read("camel");
+        read("cassandra");
+        read("flink");
+        read("hbase");
+        read("ignite");
+        read("isis");
         writeTenFold("ambari");
         writeTenFold("beam");
         writeTenFold("camel");
@@ -126,7 +133,43 @@ public class TrainingSetGenerator {
         }
 
     }
-
+    public void read (String projectName) {
+        try {
+            Reader in = new FileReader(path + projectName + ".csv");
+//            Reader in = new FileReader("/Users/leechanggong/Projects/ASTChangeAnalyzer/ASTChangeAnalyzer/data/apacheURLList.csv");
+            CSVParser parser = CSVFormat.EXCEL.parse(in);
+            int i = 0;
+            for (CSVRecord record : parser) {
+                ArrayList<String> temp = new ArrayList<>();
+                boolean a = false;
+                String name = "";
+                for (String content:record) {
+                    if(!a) {
+                        a = true;
+                        if (projectName.equals("ambari")) {
+                            ambari.add(content);
+                        } else if (projectName.equals("beam")) {
+                            beam.add(content);
+                        } else if (projectName.equals("camel")) {
+                            camel.add(content);
+                        } else if (projectName.equals("cassandra")) {
+                            cassandra.add(content);
+                        } else if (projectName.equals("flink")) {
+                            flink.add(content);
+                        } else if (projectName.equals("hbase")) {
+                            hbase.add(content);
+                        } else if (projectName.equals("ignite")) {
+                            ignite.add(content);
+                        } else if (projectName.equals("isis")) {
+                            isis.add(content);
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void read () {
         try {
