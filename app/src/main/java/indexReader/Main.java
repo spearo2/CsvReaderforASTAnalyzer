@@ -34,6 +34,10 @@ public class Main {
             IndexCombiner combine = new IndexCombiner(args[1]);
         } else if (args[0].equals("-count")) {
             Counter counter = new Counter(args[1], args[2]);
+        } else if (args[0].equals("-back")) {
+            BackReader backReader = new BackReader(args[1], args[2]);
+        } else if (args[0].equals("-trainset")) {
+            TrainingSetGenerator trainingSetGenerator = new TrainingSetGenerator(args[1]);
         }
         else {
             System.out.println("Please try again with following options"
