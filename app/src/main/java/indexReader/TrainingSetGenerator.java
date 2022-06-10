@@ -43,45 +43,36 @@ public class TrainingSetGenerator {
         writeTenFold("isis");
     }
     public void writeTenFold(String projectName) {
-        int issueNum;
         ArrayList<String> issues = new ArrayList<>();
         if (projectName.equals("ambari")) {
-            issueNum = Integer.parseInt(ambari.get(0));
             for (int i = 1; i < ambari.size(); i++) {
                 issues.add(ambari.get(i));
             }
         } else if (projectName.equals("beam")) {
-            issueNum = Integer.parseInt(beam.get(0));
             for (int i = 1; i < beam.size(); i++) {
                 issues.add(beam.get(i));
             }
         } else if (projectName.equals("camel")) {
-            issueNum = Integer.parseInt(camel.get(0));
             for (int i = 1; i < camel.size(); i++) {
                 issues.add(camel.get(i));
             }
         } else if (projectName.equals("cassandra")) {
-            issueNum = Integer.parseInt(cassandra.get(0));
             for (int i = 1; i < cassandra.size(); i++) {
                 issues.add(cassandra.get(i));
             }
         } else if (projectName.equals("flink")) {
-            issueNum = Integer.parseInt(flink.get(0));
             for (int i = 1; i < flink.size(); i++) {
                 issues.add(flink.get(i));
             }
         } else if (projectName.equals("hbase")) {
-            issueNum = Integer.parseInt(hbase.get(0));
             for (int i = 1; i < hbase.size(); i++) {
                 issues.add(hbase.get(i));
             }
         } else if (projectName.equals("ignite")) {
-            issueNum = Integer.parseInt(ignite.get(0));
             for (int i = 1; i < ignite.size(); i++) {
                 issues.add(ignite.get(i));
             }
         } else if (projectName.equals("isis")) {
-            issueNum = Integer.parseInt(isis.get(0));
             for (int i = 1; i < isis.size(); i++) {
                 issues.add(isis.get(i));
             }
